@@ -44,7 +44,7 @@
 		<Filter Name="Header Files" Filter="fi;fd"/>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
-		<File RelativePath=".\BitString.f90"/>
+		<File RelativePath=".\src\BitString.f90"/>
 		<File RelativePath=".\src\Exceptions.f90"/>
 		<File RelativePath="..\..\MulticomponentDiffusion\MulticomponentDiffusion\fjson.f90"/>
 		<File RelativePath=".\src\get_cmd_arg_inc.f90"/>
@@ -54,8 +54,8 @@
 		<File RelativePath=".\src\Logger.f90"/>
 		<File RelativePath=".\src\logger_inc.f90"/>
 		<File RelativePath=".\src\Optional.f90"/>
-		<File RelativePath="..\..\HuffmanTextCompression\Queue.f90"/>
-		<File RelativePath="..\..\HuffmanTextCompression\Sort.f90"/>
+		<File RelativePath=".\src\Queue.f90"/>
+		<File RelativePath=".\src\Sort.f90"/>
 		<File RelativePath=".\src\String.f90"/>
 		<File RelativePath=".\src\UStorage.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>
