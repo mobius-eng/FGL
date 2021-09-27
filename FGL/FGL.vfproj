@@ -46,7 +46,7 @@
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<File RelativePath=".\src\BitString.f90"/>
 		<File RelativePath=".\src\Exceptions.f90"/>
-		<File RelativePath="..\..\MulticomponentDiffusion\MulticomponentDiffusion\fjson.f90"/>
+		<File RelativePath=".\src\fjson.f90"/>
 		<File RelativePath=".\src\get_cmd_arg_inc.f90"/>
 		<File RelativePath=".\src\Hash.f90"/>
 		<File RelativePath=".\src\HashTable.f90"/>
