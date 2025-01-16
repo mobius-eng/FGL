@@ -17,10 +17,13 @@ program StringTest
     
     character(len=256) :: s1, s2
     type(c_ptr) :: cs1, cs2, ctmp
+    integer(c_size_t) :: n
+    
     s1 = 'Hello World!'
     cs1 = associate_c_string(s1, .true.)
     cs2 = associate_c_string(s2)
-    ctmp = strncpy(cs2, cs1, len_trim(s1)+10)
+    n = len_trim(s1) + 10
+    ctmp = strncpy(cs2, cs1, n)
     call rm_null_from_fstring(s2)
     write (*,*) trim(s2)
     

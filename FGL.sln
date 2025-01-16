@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31229.75
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "ListDemo", "ListDemo\ListDemo.vfproj", "{CB081CAA-22E4-4309-B2CE-76CC58A8F136}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -54,6 +54,11 @@ Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "BitStringDemo", "BitStringD
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cjson", "cjson\cjson.vcxproj", "{F6056010-6DC0-40F5-9F64-3713CC2D5AF9}"
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "CmdArgDemo", "CmdArgDemo\CmdArgDemo.vfproj", "{8B0B746F-C318-4359-A771-EDF9FC106317}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EBD0AE01-8C27-4AA1-980A-21A96BDD6054} = {EBD0AE01-8C27-4AA1-980A-21A96BDD6054}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +156,14 @@ Global
 		{F6056010-6DC0-40F5-9F64-3713CC2D5AF9}.Release|x64.Build.0 = Release|x64
 		{F6056010-6DC0-40F5-9F64-3713CC2D5AF9}.Release|x86.ActiveCfg = Release|Win32
 		{F6056010-6DC0-40F5-9F64-3713CC2D5AF9}.Release|x86.Build.0 = Release|Win32
+		{8B0B746F-C318-4359-A771-EDF9FC106317}.Debug|x64.ActiveCfg = Debug|x64
+		{8B0B746F-C318-4359-A771-EDF9FC106317}.Debug|x64.Build.0 = Debug|x64
+		{8B0B746F-C318-4359-A771-EDF9FC106317}.Debug|x86.ActiveCfg = Debug|Win32
+		{8B0B746F-C318-4359-A771-EDF9FC106317}.Debug|x86.Build.0 = Debug|Win32
+		{8B0B746F-C318-4359-A771-EDF9FC106317}.Release|x64.ActiveCfg = Release|x64
+		{8B0B746F-C318-4359-A771-EDF9FC106317}.Release|x64.Build.0 = Release|x64
+		{8B0B746F-C318-4359-A771-EDF9FC106317}.Release|x86.ActiveCfg = Release|Win32
+		{8B0B746F-C318-4359-A771-EDF9FC106317}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
