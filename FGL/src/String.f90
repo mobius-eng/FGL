@@ -1,3 +1,9 @@
+! STRING_M
+!
+! (c) 2024 Alexey V. Cherkaev
+!
+! Additional string functions
+!
 module string_m
     
     use iso_c_binding
@@ -19,6 +25,15 @@ module string_m
 
 contains
 
+    ! TO_LOWER
+    !   Convert string to lower-case (only latin symbols)
+    !
+    !   Parameters
+    !       S       (INOUT) String to convert (in place)
+    !
+    ! Details
+    !   In-place convert string to lower-case. Conversion is
+    !   independent of a particular encoding.
     subroutine to_lower(s)
         character(len=*), intent(inout) :: s
         integer :: ia, ic, ialph
@@ -34,6 +49,15 @@ contains
         end do
     end subroutine
 
+    ! TO_UPPER
+    !   Convert string to upper-case (only latin symbols)
+    !
+    !   Parameters
+    !       S       (INOUT) String to convert (in place)
+    !
+    ! Details
+    !   In-place convert string to upper-case. Conversion is
+    !   independent of a particular encoding.
     subroutine to_upper(s)
         character(len=*), intent(inout) :: s
         integer :: ia, ic, ialph
@@ -46,6 +70,7 @@ contains
             end select
         end do
     end subroutine
+    
     
     subroutine get_all_cmd_arg(string)
         character(len=*), intent(out) :: string
@@ -82,7 +107,7 @@ contains
     
     ! Helpers to deal with Fortran & C strings
     function associate_c_string(fstring, addnull) result(s)
-        character(len=*), intent(inout) :: fstring
+        character(len=*), intent(inout), target :: fstring
         logical, intent(in), optional :: addnull
         type(c_ptr) :: s
         integer :: n

@@ -1,7 +1,15 @@
+! ERROR_M
+!
+! (c) 2024 Alexey V. Cherkaev
+!
+! Error (exception) handling routines & methods
+!
 module error_m
     
     implicit none
     private
+    ! Errors are identified by the error number
+    ! These numbers (errors) are split into classes
     ! Classes of errors
     integer, parameter, public :: IOERROR_CLASS = 0
         !! Base value for I/O operation errors
@@ -43,6 +51,7 @@ module error_m
     integer, parameter, public :: UNSPECIFIED_ERROR = USERERROR_CLASS
 
     integer, parameter :: exception_message_max_length = 1024
+    
     type, public :: exception
         integer :: error_code
         character(len = exception_message_max_length) :: message

@@ -112,7 +112,7 @@ contains
             integer(c_int8_t) :: m, i
             m = n
             do i = 1, 8
-                write (unit, '(I1)', iostat = iostat, iomsg = iomsg) iand(m, 1)
+                write (unit, '(I1)', iostat = iostat, iomsg = iomsg) iand(m, 1_c_int8_t)
                 m = ishft(m, -1)
             end do
         end subroutine

@@ -48,14 +48,14 @@ contains
         character(len=*), intent(in) :: str
         integer(ihash), intent(in) :: seed
         integer(ihash) :: nstr
-        integer(ihash) :: c1, c2, r1, r2, m, n, istr, chunk, k
+        integer(ihash) :: c1, c2, r1, r2, m, n, istr, chunk, k, tmp
         ! May need some improvements
-        c1 = z'cc9e2d51'
-        c2 = z'1b873593'
+        c1 = int(z'cc9e2d51', ihash)
+        c2 = int(z'1b873593', ihash)
         r1 = 15
         r2 = 13
         m = 5
-        n = z'e6546b64'
+        n = int(z'e6546b64', ihash)
         hsh = seed
         nstr = len_trim(str, ihash)
         istr = 1
@@ -65,20 +65,23 @@ contains
             k = k * c1
             k = ishftc(k, r1)
             k = k * c2
-            hsh = ixor(hsh, k)
+            hsh = ieor(hsh, k)
             hsh = ishftc(hsh, r2)
             hsh = hsh * m + n
         end do
-        hsh = ixor(hsh, nstr)
-        hsh = ixor(hsh, ishft(hsh, -16))
-        hsh = hsh * z'85ebca6b'
-        hsh = ixor(hsh, ishft(hsh, -13))
-        hsh = hsh * z'c2b2ae35'
-        hsh = ixor(hsh, ishft(hsh, -16))
+        hsh = ieor(hsh, nstr)
+        hsh = ieor(hsh, ishft(hsh, -16))
+        tmp = int(z'85ebca6b', ihash)
+        hsh = hsh * tmp
+        hsh = ieor(hsh, ishft(hsh, -13))
+        tmp = int(z'c2b2ae35', ihash)
+        hsh = hsh * tmp
+        hsh = ieor(hsh, ishft(hsh, -16))
         ! Fortran doesn't have unsigned numbers
         ! Ensure we get positive 32-bit number
         ! Effectively, hash is 31-bit.
-        hsh = iand(hsh, z'7FFFFFFF')
+        tmp = int(z'7FFFFFFF', ihash)
+        hsh = iand(hsh, tmp)
     end function
 
 end module
