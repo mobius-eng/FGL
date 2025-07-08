@@ -1,0 +1,60 @@
+{
+    "version": 8,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default",
+            "generator": "Ninja",
+            "hidden": true
+        },
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "description": "Debug build using Ninja generator",
+            "inherits": ["default"],
+            "binaryDir": "${sourceDir}/build/debug",
+            "cacheVariables": {
+                "CMAKE_Fortran_COMPILER": "ifx",
+                "CMAKE_Fortran_FLAGS": "-g -O0"
+            },
+            "environment": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "hidden": false
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "description": "Debug build using Ninja generator",
+            "inherits": ["default"],
+            "binaryDir": "${sourceDir}/build/release",
+            "cacheVariables": {
+                "CMAKE_Fortran_COMPILER": "ifx",
+                "CMAKE_Fortran_FLAGS": "-O3"
+            },
+            "environment": {
+                "CMAKE_BUILD_TYPE": "Release"
+            },
+            "hidden": false
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "Debug",
+            "configurePreset": "debug",
+            "hidden": false,
+            "configuration": "Debug"
+        },
+        {
+            "name": "Release",
+            "configurePreset": "release",
+            "hidden": false,
+            "configuration": "Release"
+        }
+    ]
+}
