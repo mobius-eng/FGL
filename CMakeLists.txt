@@ -7,7 +7,7 @@ project(ftestproj VERSION 0.1
 enable_language(Fortran)
 
 set(CMAKE_Fortran_COMPILER "ifx")
-set(CMAKE_Fortran_FLAGS_DEBUG_INIT "-g -O0")
+set(CMAKE_Fortran_FLAGS_DEBUG_INIT "-g -O0 -cxxlib -shared-intel")
 set(CMAKE_Fortran_FLAGS_RELEASE_INIT "-O3")
 
 

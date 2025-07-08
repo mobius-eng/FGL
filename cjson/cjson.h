@@ -21,7 +21,7 @@ CJSON*       cjson_new_empty();
 
 void         cjson_delete(CJSON* json);
 
-CJSON*       cjson_sub(CJSON *j, const char ** path);
+CJSON*       cjson_sub(CJSON *j, char ** path);
 CJSON*       cjson_at(CJSON *j, int_fast32_t index);
 double       cjson_get_num(CJSON *j);
 int_fast32_t cjson_get_int(CJSON *j);

@@ -99,11 +99,15 @@ subroutine fjson_init_from_file(self, file_name)
 end subroutine
 
 subroutine f_c_char_array(fsa, cha)
-    character(kind = c_char, len = *), dimension(:), target :: fsa
-    type(c_ptr), dimension(*) :: cha
-    integer :: i
+    character(len = *), dimension(:)     :: fsa
+    character(kind = c_char, len=256), &
+            dimension(size(fsa)), target :: cfsa
+    type(c_ptr), dimension(*)            :: cha
+    integer                              :: i
+
     do i = 1, size(fsa)
-        cha(i) = c_loc(fsa(i))
+        cfsa(i) = trim(fsa(i))
+        cha(i) = associate_c_string(cfsa(i), addnull = .true.)
     end do
     cha(size(fsa)+1) = c_null_ptr
 end subroutine

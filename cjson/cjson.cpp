@@ -1,6 +1,8 @@
 #include <fstream>
 #include <cstring>
 #include <cmath>
+#include <iostream>
+#include <string>
 
 #include "json.hpp"
 typedef nlohmann::json CJSON;
@@ -39,6 +41,7 @@ CJSON* cjson_new_from_file(const char* file_name)
     CJSON* j = new nlohmann::json(nlohmann::json::parse(file));
     //file >> *j;
     //file.close();
+    std::cout << *j << std::endl;
     return j;
 }
 
@@ -52,13 +55,16 @@ void cjson_delete(CJSON *json)
     delete json;
 }
 
-CJSON *cjson_sub(CJSON *j, const char **path)
+CJSON *cjson_sub(CJSON *j, char **path)
 {
     if (*path == NULL)
     {
         return j;
     }
-    return cjson_sub(&(*j)[path[0]], path+1);
+    char **next = path + 1;
+    std::string s(*path);
+    CJSON *jnext = &((*j)[s]);
+    return cjson_sub(jnext, next);
 }
 
 CJSON *cjson_at(CJSON *j, int_fast32_t index)
