@@ -1,7 +1,6 @@
 #include <fstream>
 #include <cstring>
 #include <cmath>
-#include <iostream>
 #include <string>
 
 #include "json.hpp"
@@ -34,15 +33,22 @@ static json& get_from_path(CJSON& j, const char** spath, const int* ipath, const
 
 extern "C" {
 
-CJSON* cjson_new_from_file(const char* file_name)
+void cjson_new_from_file(CJSON **j, const char* file_name, cjson_int32_t *iostat)
 {
-    
-    std::ifstream file(file_name);
-    CJSON* j = new nlohmann::json(nlohmann::json::parse(file));
-    //file >> *j;
-    //file.close();
-    std::cout << *j << std::endl;
-    return j;
+    try
+    {
+        std::ifstream file(file_name);
+        *j = new nlohmann::json(nlohmann::json::parse(file));
+        *iostat = CJSON_SUCCESS;
+    }
+    catch(const std::ifstream::failure &e)
+    {
+        *iostat = CJSON_FILE_ERROR;
+    }
+    catch(...)
+    {
+        *iostat = CJSON_PARSE_ERROR;
+    }
 }
 
 CJSON* cjson_new_empty()
@@ -50,50 +56,104 @@ CJSON* cjson_new_empty()
     return new nlohmann::json();
 }
 
-void cjson_delete(CJSON *json)
+void cjson_delete(CJSON *json, cjson_int32_t* istat)
 {
-    delete json;
-}
-
-CJSON *cjson_sub(CJSON *j, char **path)
-{
-    if (*path == NULL)
+    try
     {
-        return j;
+        delete json;
+        *istat = CJSON_SUCCESS;
     }
-    char **next = path + 1;
-    std::string s(*path);
-    CJSON *jnext = &((*j)[s]);
-    return cjson_sub(jnext, next);
+    catch(...)
+    {
+        *istat = CJSON_ACCESS_ERROR;
+    }
 }
 
-CJSON *cjson_at(CJSON *j, int_fast32_t index)
-{
-    return &((*j)[index]);
+void cjson_sub(CJSON **newj, CJSON *j, char **path, cjson_int32_t *istat)
+{   
+    if (path == NULL || j == NULL || j->is_null())
+    {
+        // invalid input
+        *istat = CJSON_INVALID_INPUT_ERROR;
+        return;
+    }
+
+    int i = 0;
+    while (path[i] != NULL)
+    {
+        j = &((*j)[path[i]]);
+        if (j->is_null())
+        {
+            *istat = CJSON_ACCESS_ERROR;
+            return;
+        }
+        i++;
+    }
+    *newj = j;
+    *istat = CJSON_SUCCESS;
 }
 
-double cjson_get_num(CJSON *j)
+void cjson_at(CJSON **newj, CJSON *j, cjson_int32_t index, cjson_int32_t *istat)
 {
-    if (j->is_number())
-        return j->get<double>();
-    else
-        return NAN;
+    if (j == NULL || index < 0 || (!j->is_array()))
+    {
+        *istat = CJSON_INVALID_INPUT_ERROR;
+        return;
+    }
+
+    *newj = &((*j)[index]);
+    
+    if ((*newj)->is_null())
+    {
+        *istat = CJSON_ACCESS_ERROR;
+        return;
+    }
+
+    *istat = CJSON_SUCCESS;
 }
 
-int_fast32_t cjson_get_int(CJSON *j)
+void cjson_get_num(double *x, CJSON *j, cjson_int32_t *istat)
 {
-    if (j->is_number_integer())
-        return j->get<int>();
-    else
-        return NAN;
+    if (j == NULL || (!j->is_number()))
+    {
+        *istat = CJSON_INVALID_INPUT_ERROR;
+        return;
+    }
+    *x = j->get<double>();
+    *istat = CJSON_SUCCESS;
 }
 
-void cjson_get_str(char *dest, CJSON *j, int_fast32_t max_char)
+void cjson_get_int(cjson_int32_t *x, CJSON *j, cjson_int32_t *istat)
 {
-    if(j->is_string())
+    if (j == NULL || (!j->is_number_integer()))
+    {
+        *istat = CJSON_INVALID_INPUT_ERROR;
+        return;
+    }
+    int n = j->get<int>();
+    *x = n;
+    *istat = CJSON_SUCCESS;
+}
+
+void cjson_get_str(char *dest, CJSON *j, cjson_int32_t max_char, cjson_int32_t *istat, cjson_int32_t *len)
+{
+    if (dest == NULL || j == NULL || (!j->is_string()) || max_char <= 0)
+    {
+        *istat = CJSON_INVALID_INPUT_ERROR;
+        return;
+    }
+    try
     {
         std::string s = j->get<std::string>();
-        std::strncpy(dest, s.c_str(), max_char);
+        int n = s.length();
+        *len = n < max_char? n : max_char-1;
+        std::strncpy(dest, s.c_str(), *len);
+        dest[*len] = '\0';
+        *istat = CJSON_SUCCESS;
+    }
+    catch(...)
+    {
+        *istat = CJSON_ACCESS_ERROR;
     }
 }
 
@@ -160,6 +220,4 @@ void cjson_put_string_g(CJSON* json, const char** spath, const int* ipath, const
     get_from_path(*json, spath, ipath, index_selector) = string;
 }
 */
-
-
 }

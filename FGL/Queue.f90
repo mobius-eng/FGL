@@ -1,55 +1,62 @@
-module queue_m
-    
-    use list_m
-    implicit none
-    
-    type queue_t(len)
-        integer, len :: len
-        type(list_t(len)) :: buffer
-        integer :: head, tail, count
-    contains
-        procedure, pass(self) :: push_back => queue_push_back
-        procedure, pass(self) :: pop_front => queue_pop_front
-        procedure, pass(self) :: init      => queue_init
-        procedure, pass(self) :: peek_head  => queue_peek_head
-    end type
+MODULE queue_m
 
-contains
-    
-    subroutine queue_init(self, capacity)
-        class(queue_t(*)), intent(inout) :: self
-        integer :: capacity
-        call self%buffer%init(capacity)
-        self%head = 0
-        self%tail = 0
-        self%count = 0
-    end subroutine
-    
-    subroutine queue_push_back(self, item)
-        class(queue_t(*)), intent(inout) :: self
-        type(*), intent(in) :: item
-        self%tail = self%tail + 1
-        if (self%tail > self%buffer%capacity()) self%tail = 1
-        call self%buffer%set(self%tail, item)
-        self%count = self%count + 1
-        if (self%count == 1) self%head = self%tail
-    end subroutine
-    
-    subroutine queue_pop_front(self, item)
-        class(queue_t(*)), intent(inout) :: self
-        type(*), intent(inout) :: item
-        if (self%count > 0) then
-            call self%buffer%get(self%head, item)
-            self%count = self%count - 1
-            self%head = self%head + 1
-            if (self%head > self%buffer%capacity()) self%head = 1
-        end if
-    end subroutine
-    
-    subroutine queue_peek_head(self, item)
-        class(queue_t(*)), intent(inout) :: self
-        type(*), intent(inout) :: item
-        if (self%count > 0) call self%buffer%get(self%head, item)
-    end subroutine
+USE list_m
+IMPLICIT NONE
+PRIVATE
 
-end module
+TYPE, PUBLIC :: queue_t(len)
+  INTEGER, len :: len
+  TYPE(list_t(len)) :: buffer
+  INTEGER :: head, tail, count
+  CONTAINS
+  PROCEDURE, PASS(self) :: push_back => queue_push_back
+  PROCEDURE, PASS(self) :: pop_front => queue_pop_front
+  PROCEDURE, PASS(self) :: init      => queue_init
+  PROCEDURE, PASS(self) :: peek_head  => queue_peek_head
+END TYPE
+
+
+CONTAINS
+
+
+SUBROUTINE queue_init(self, capacity)
+  CLASS(queue_t(*)), INTENT(INOUT) :: self
+  INTEGER :: capacity
+  CALL self%buffer%init(capacity)
+  self%head = 0
+  self%tail = 0
+  self%count = 0
+END SUBROUTINE
+
+
+SUBROUTINE queue_push_back(self, item)
+  CLASS(queue_t(*)), INTENT(INOUT) :: self
+  TYPE(*), INTENT(in) :: item
+  self%tail = self%tail + 1
+  IF (self%tail > self%buffer%capacity()) self%tail = 1
+  CALL self%buffer%set(self%tail, item)
+  self%count = self%count + 1
+  IF (self%count == 1) self%head = self%tail
+END SUBROUTINE
+
+
+SUBROUTINE queue_pop_front(self, item)
+  CLASS(queue_t(*)), INTENT(INOUT) :: self
+  TYPE(*), INTENT(INOUT) :: item
+  IF (self%count > 0) THEN
+    CALL self%buffer%get(self%head, item)
+    self%count = self%count - 1
+    self%head = self%head + 1
+    IF (self%head > self%buffer%capacity()) self%head = 1
+  END IF
+END SUBROUTINE
+
+
+SUBROUTINE queue_peek_head(self, item)
+  CLASS(queue_t(*)), INTENT(INOUT) :: self
+  TYPE(*), INTENT(INOUT) :: item
+  IF (self%count > 0) CALL self%buffer%get(self%head, item)
+END SUBROUTINE
+
+
+END MODULE

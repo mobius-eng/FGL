@@ -1,0 +1,35 @@
+{
+    "type": "light",
+    "name": "Fortran Light Theme",
+    "colors": {
+        "editor.background": "#FFFFFF",
+        "editor.foreground": "#000000",
+        "editor.selectionBackground": "#71aaff",
+        "list.dropBackground": "#d0d1d2",
+		"sideBar.background": "#d0d1d2",
+		"editor.lineHighlightBackground": "#f6f6f6",
+		"editor.inactiveSelectionBackground": "#c6d0df26",
+		"editor.selectionHighlightBackground": "#add6ff26"
+    },
+    "tokenColors":[
+        {
+            "scope": "keyword.operator",
+            "settings": {
+                "fontStyle": "bold"
+            }
+        },
+        {
+            "scope":"keyword",
+            "settings": {
+                "fontStyle": "bold"
+            }
+        },
+        {
+            "scope":"comment",
+            "settings": {
+                "foreground": "#29603a",
+                "fontStyle": "italic"
+            }
+        }
+    ]
+}

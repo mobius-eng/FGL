@@ -1,117 +1,92 @@
-! ERROR_M
+MODULE error_m
 !
 ! (c) 2024 Alexey V. Cherkaev
 !
 ! Error (exception) handling routines & methods
 !
-module error_m
-    
-    implicit none
-    private
-    ! Errors are identified by the error number
-    ! These numbers (errors) are split into classes
-    ! Classes of errors
-    integer, parameter, public :: IOERROR_CLASS = 0
-        !! Base value for I/O operation errors
-    integer, parameter, public :: MEMERROR_CLASS = -100
-        !! Base value for memory operation errors
-    integer, parameter, public :: ARRAYERROR_CLASS = -200
-        !! Base value for array operation errors
-    integer, parameter, public :: ARGERROR_CLASS = -300
-        !! Base value for general argument passing errors
-    integer, parameter, public :: VALERROR_CLASS = -400
-        !! Base value for incorrect value errors
-    integer, parameter, public :: USERERROR_CLASS = -1000
-        !! Base value for user-defined errors
 
-    integer, parameter, public :: NO_ERROR = 0
-    ! I/O Errors
-    integer, parameter, public :: IO_UNSPECIFIED_ERROR = IOERROR_CLASS - 1
-    integer, parameter, public :: IO_OPEN_ERROR = IOERROR_CLASS - 2
-    integer, parameter, public :: IO_OUTPUT_ERROR = IOERROR_CLASS - 3
-    integer, parameter, public :: IO_INPUT_ERROR = IOERROR_CLASS - 4
-    integer, parameter, public :: IO_FILE_ACCESS_ERROR = IOERROR_CLASS - 5
-    ! Memory access (?) and allocation
-    integer, parameter, public :: MEM_UNSPECIFIED_ERROR = MEMERROR_CLASS - 1
-    integer, parameter, public :: MEM_ALLOC_ERROR = MEMERROR_CLASS - 2
-    integer, parameter, public :: MEM_ACCESS_ERROR = MEMERROR_CLASS - 3
-    ! Array related errors
-    integer, parameter, public :: ARRAY_UNSPECIFIED_ERROR = ARRAYERROR_CLASS - 1
-    integer, parameter, public :: ARRAY_SIZE_ERROR = ARRAYERROR_CLASS - 2
-    integer, parameter, public :: ARRAY_SIZE_MISMATCH_ERROR = ARRAYERROR_CLASS - 3
-    ! Argument errors
-    integer, parameter, public :: ARG_UNSPECIFIED_ERROR = ARGERROR_CLASS - 1
-    integer, parameter, public :: ARG_NOT_PROVIDED_ERROR = ARGERROR_CLASS - 2
-    integer, parameter, public :: ARG_TYPE_ERROR = ARGERROR_CLASS - 3
-        !! This is relevant for `class` arguments.
-    ! Value errors
-    integer, parameter, public :: VAL_UNSPECIFIED_ERROR = VALERROR_CLASS - 1
-    integer, parameter, public :: VAL_DOMAIN_ERROR = VALERROR_CLASS - 2
-    ! Use USERERROR_CLASS value as general unspecified error
-    integer, parameter, public :: UNSPECIFIED_ERROR = USERERROR_CLASS
+IMPLICIT NONE
 
-    integer, parameter :: exception_message_max_length = 1024
-    
-    type, public :: exception
-        integer :: error_code
-        character(len = exception_message_max_length) :: message
-    end type
-    
-    class(exception), pointer, private :: last_error => null()
-    
-    interface set_error
-        module procedure set_error_exception, set_error_code_msg
-    end interface
-    
-    public :: get_last_error_code, get_last_error_message, set_error, &
-        &   release_error, get_last_error_object
+PRIVATE
 
-contains
+! Errors are identified by the error number
 
-    function get_last_error_code() result (res)
-        integer :: res
-        if (associated(last_error)) then
-            res = last_error%error_code
-        else
-            res = 0
-        end if
-    end function
+INTEGER, PARAMETER, PUBLIC    :: no_error = 0
 
-    subroutine get_last_error_message(msg)
-        character(len=*), intent(inout) :: msg
-        if (associated(last_error)) then
-            msg = trim(last_error%message)
-        else
-            msg = ''
-        end if
-    end subroutine
+! These numbers (errors) are split into classes
+! Classes of errors
+INTEGER, PARAMETER, PUBLIC    :: ioerror_class = 0
+INTEGER, PARAMETER, PUBLIC    :: memerror_class = -100
+INTEGER, PARAMETER, PUBLIC    :: arrayerror_class = -200
+INTEGER, PARAMETER, PUBLIC    :: argerror_class = -300
+INTEGER, PARAMETER, PUBLIC    :: valerror_class = -400
+INTEGER, PARAMETER, PUBLIC    :: usererror_class = -1000
 
-    subroutine set_error_exception(err)        
-        class(exception), intent(in) :: err
-        call release_error()
-        allocate(last_error, source=err)
-    end subroutine
-    
-    subroutine set_error_code_msg(code, msg)
-        integer, intent(in) :: code
-        character(len=*), intent(in) :: msg
-        type(exception) err
-        err = exception(code, msg)
-        call release_error()
-        allocate(last_error, source = err)
-    end subroutine
+! I/O Errors
+INTEGER, PARAMETER, PUBLIC    :: io_unspecified_error = ioerror_class - 1
+INTEGER, PARAMETER, PUBLIC    :: io_open_error = ioerror_class - 2
+INTEGER, PARAMETER, PUBLIC    :: io_output_error = ioerror_class - 3
+INTEGER, PARAMETER, PUBLIC    :: io_input_error = ioerror_class - 4
+INTEGER, PARAMETER, PUBLIC    :: io_file_access_error = ioerror_class - 5
 
-    subroutine release_error()
-        if (associated(last_error)) then
-            deallocate(last_error)
-        end if
-        last_error => null()
-    end subroutine
-    
-    subroutine get_last_error_object(errobj)
-        class(exception), pointer, intent(inout) :: errobj
-        errobj => last_error
-    end subroutine
-    
-    
-end module error_m
+! Memory access and allocation
+INTEGER, PARAMETER, PUBLIC    :: mem_unspecified_error = memerror_class - 1
+INTEGER, PARAMETER, PUBLIC    :: mem_alloc_error = memerror_class - 2
+INTEGER, PARAMETER, PUBLIC    :: mem_access_error = memerror_class - 3
+
+! Array related errors
+INTEGER, PARAMETER, PUBLIC    :: array_unspecified_error = arrayerror_class - 1
+INTEGER, PARAMETER, PUBLIC    :: array_size_error = arrayerror_class - 2
+INTEGER, PARAMETER, PUBLIC    :: array_size_mismatch_error = arrayerror_class - 3
+
+! Argument errors
+INTEGER, PARAMETER, PUBLIC    :: arg_unspecified_error = argerror_class - 1
+INTEGER, PARAMETER, PUBLIC    :: arg_not_provided_error = argerror_class - 2
+INTEGER, PARAMETER, PUBLIC    :: arg_type_error = argerror_class - 3
+
+! Value errors
+INTEGER, PARAMETER, PUBLIC    :: val_unspecified_error = valerror_class - 1
+INTEGER, PARAMETER, PUBLIC    :: val_domain_error = valerror_class - 2
+
+! Use USERERROR_CLASS value as general unspecified error
+INTEGER, PARAMETER, PUBLIC    :: unspecified_error = usererror_class
+
+INTEGER, PARAMETER            :: max_err_msg_length = 1024
+
+! Store information on last error
+INTEGER                       :: last_error_code = no_error
+CHARACTER(max_err_msg_length) :: last_error_message
+
+PUBLIC                        :: get_last_error_code,               &
+                                 get_last_error_message, set_error, &
+                                 release_error
+
+CONTAINS
+
+FUNCTION get_last_error_code() result (res)
+  INTEGER :: res
+  res = last_error_code
+END FUNCTION
+
+FUNCTION get_last_error_message() result (msg)
+  CHARACTER(:), ALLOCATABLE :: msg
+  msg = trim(last_error_message)
+END FUNCTION
+
+SUBROUTINE set_error(code, msg)
+  INTEGER, INTENT(IN) :: code
+  CHARACTER(*), INTENT(IN) :: msg
+  INTEGER :: n
+  last_error_code = code
+  n = len_trim(msg)
+  n = min(n, max_err_msg_length)
+  last_error_message(1:n) = msg(1:n)
+END SUBROUTINE
+
+
+SUBROUTINE release_error()
+  last_error_code = no_error
+  last_error_message = ''
+END SUBROUTINE
+
+END MODULE

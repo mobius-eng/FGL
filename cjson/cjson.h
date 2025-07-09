@@ -2,8 +2,13 @@
 
 #ifdef __cplusplus
 #include <cstdint>
-typedef std::int_fast32_t int_fast32_t;
+typedef std::int32_t cjson_int32_t;
 extern "C" {
+#else
+
+#include <stdint.h>
+typedef int32_t cjson_int32_t;
+
 #endif
 
 #ifndef __cplusplus
@@ -15,17 +20,21 @@ extern "C" {
 typedef void CJSON;
 #endif
 
+#define CJSON_SUCCESS 0
+#define CJSON_INVALID_INPUT_ERROR -1
+#define CJSON_FILE_ERROR -2
+#define CJSON_PARSE_ERROR -3
+#define CJSON_ACCESS_ERROR -4
 
-CJSON*       cjson_new_from_file(const char* file_name);
-CJSON*       cjson_new_empty();
 
-void         cjson_delete(CJSON* json);
-
-CJSON*       cjson_sub(CJSON *j, char ** path);
-CJSON*       cjson_at(CJSON *j, int_fast32_t index);
-double       cjson_get_num(CJSON *j);
-int_fast32_t cjson_get_int(CJSON *j);
-void         cjson_get_str(char *dest, CJSON *j, int_fast32_t max_char);
+void   cjson_new_from_file(CJSON **j, const char* file_name, cjson_int32_t *iostat);
+CJSON* cjson_new_empty();
+void   cjson_delete(CJSON* json, cjson_int32_t *istat);
+void   cjson_sub(CJSON **newj, CJSON *j, char **path, cjson_int32_t *istat);
+void   cjson_at(CJSON **newj, CJSON *j, cjson_int32_t index, cjson_int32_t *istat);
+void   cjson_get_num(double *x, CJSON *j, cjson_int32_t *istat);
+void   cjson_get_int(cjson_int32_t *x, CJSON *j, cjson_int32_t *istat);
+void   cjson_get_str(char *dest, CJSON *j, cjson_int32_t max_char, cjson_int32_t *istat, cjson_int32_t *len);
 
 
 /*

@@ -12,6 +12,6 @@ add_library(
     Queue.f90
     Hash.f90
     HashTable.f90
-    fjson.f90
+    FJSON.f90
 )
 
