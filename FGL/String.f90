@@ -10,7 +10,7 @@ USE error_m, ONLY       : usererror_class, set_error
 IMPLICIT NONE
 PRIVATE
 PUBLIC :: to_lower, to_upper,get_all_cmd_arg, char_array_to_string, &
-          associate_c_string, rm_null_from_fstring
+          associate_c_string, rm_null_from_fstring, cmd_arg_max_length
 
 CHARACTER(len=26), PARAMETER :: alph(2) = &
   ['ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz']

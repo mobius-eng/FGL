@@ -9,7 +9,7 @@ int main()
     cjson_new_from_file(&j, "test.json", &istat);
     if (istat != CJSON_SUCCESS)
     {
-        fprintf(stderr, "Error in initializing CJSON: %ld\n", istat);
+        fprintf(stderr, "Error in initializing CJSON: %d\n", istat);
         return -1;
     }
     char* ab_path[3] = {"A", "B", NULL};
@@ -93,7 +93,7 @@ int main()
     printf("Testing JSON C interace\n");
     printf("=========================================================\n");
     printf("J[\"A\"][\"B\"]    = %.4f\n", abx);
-    printf("J[\"A\"][\"C\"][1] = %ld\n", acx);
+    printf("J[\"A\"][\"C\"][1] = %d\n", acx);
     printf("J[\"A\"][\"D\"]    = \"%s\"\n", adx);
     printf("=========================================================\n");
     return 0;

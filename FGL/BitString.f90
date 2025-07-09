@@ -131,5 +131,5 @@ SUBROUTINE bitstring_write(self, unit, iotype, v_list, iostat, iomsg)
     END SUBROUTINE
     
 END SUBROUTINE
-    
+
 END MODULE
