@@ -28,9 +28,10 @@ CONTAINS
 SUBROUTINE list_init(self, init_capacity)
   CLASS(list_t(*)), INTENT(INOUT) :: self
   INTEGER, INTENT(IN)             :: init_capacity
-  TYPE(ustorage_t(self%len))      :: dummy_mold
-  ALLOCATE(self%items(init_capacity), source = dummy_mold)
+
+  ALLOCATE(self%items(init_capacity))
   self%ilast = 0
+  
 END SUBROUTINE
 
 

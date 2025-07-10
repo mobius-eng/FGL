@@ -1,6 +1,7 @@
 #include "get_cmd_arg_inc.f90"
 program StringTest
     
+    use iso_c_binding, only: c_ptr, c_size_t
     use string_m
     
     implicit none

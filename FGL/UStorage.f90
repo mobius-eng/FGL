@@ -23,7 +23,7 @@ TYPE ustorage_t(len)
 !       CALL X%STORE(OBJ)
 !       CALL X%RETREIVE(OBJ)
   INTEGER, len          :: len
-  INTEGER(c_int8_t)     :: data(len)
+  INTEGER(c_int8_t)     :: data(1:len)
   CONTAINS
   PROCEDURE, PASS(self) :: store => ustorage_store
   PROCEDURE, PASS(self) :: retrieve => ustorage_retrieve

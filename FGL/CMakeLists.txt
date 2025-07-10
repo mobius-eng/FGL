@@ -15,3 +15,20 @@ add_library(
     FJSON.f90
 )
 
+target_include_directories(FGL PUBLIC ${CMAKE_BINARY_DIR}/mod)
+
+add_custom_command(
+    TARGET FGL PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_SOURCE_DIR}/FGL/get_cmd_arg_inc.f90
+            ${CMAKE_BINARY_DIR}/mod/get_cmd_arg_inc.f90
+)
+
+add_custom_command(
+    TARGET FGL PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_SOURCE_DIR}/FGL/logger_inc.f90
+            ${CMAKE_BINARY_DIR}/mod/logger_inc.f90
+)
+
+add_dependencies(FGL cjson)

@@ -20,7 +20,8 @@
             "binaryDir": "${sourceDir}/build/debug",
             "cacheVariables": {
                 "CMAKE_Fortran_COMPILER": "ifx",
-                "CMAKE_Fortran_FLAGS": "-g -O0 -cxxlib -shared-intel"
+                "CMAKE_Fortran_FLAGS": "-g -O0 -cxxlib",
+                "CMAKE_Fortran_MODULE_DIRECTORY": "${sourceDir}/build/debug/mod"
             },
             "environment": {
                 "CMAKE_BUILD_TYPE": "Debug"
