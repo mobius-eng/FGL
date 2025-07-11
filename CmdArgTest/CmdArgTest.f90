@@ -1,22 +1,27 @@
 #include "get_cmd_arg_inc.f90"
-program cmd_arg_demo
+PROGRAM cmd_arg_demo
 
-implicit none
+IMPLICIT NONE
 
-integer, parameter :: wp = selected_real_kind(15)
+INTEGER, PARAMETER :: wp = selected_real_kind(15)
 
-real(wp) :: x, y
-integer :: n, iostat
+REAL(wp) :: x, y
+INTEGER :: n, iostat
 
-namelist /params/ x, y, n
+NAMELIST /params/ x, y, n
 
-! run program as: cmdarg_test x = 1.5 y = 2.4 n = 30
+! run PROGRAM as: cmdarg_test x = 1.5 y = 2.4 n = 30
 _GET_CMD_ARGS_(params, iostat)
 
-if (iostat == 0) then
-  write (*, *) x, y, n
-else
-   write (*,*) 'Error in arguments parsing'
-end if
+WRITE (*, '(T20, A)') 'FGL: Parse command arguments using namelist'
+WRITE (*, '(A,/)') REPEAT('=', 80)
+WRITE (*, '(T2, A,/)') 'Run program as cmdarg_test x= 1.5 y = 2.5 n = 30'
 
-end program
+IF (iostat == 0) THEN
+  WRITE(*, '(T2, A)') 'Arguments were parsed correctly'
+  WRITE (*, '(T4, A, F8.2, A, ES9.2, A, I6)') 'X = ', x, ', Y = ', y, ', N = ', n
+ELSE
+  WRITE (*,*) 'Error in arguments parsing'
+END IF
+
+END PROGRAM
