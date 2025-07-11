@@ -5,7 +5,7 @@ USE, INTRINSIC :: iso_fortran_env, ONLY : int8
 
 IMPLICIT NONE
 PRIVATE
-PUBLIC :: compare_fn, sort_insert
+PUBLIC :: compare_fn, sort_insert, qsort
 
 ABSTRACT INTERFACE
 
@@ -18,10 +18,19 @@ ABSTRACT INTERFACE
 END INTERFACE
 
 
+INTERFACE sort_insert
+  MODULE PROCEDURE :: sort_insert_gen, sort_insert_int, &
+                      sort_insert_real_sp, sort_insert_real_dp
+END INTERFACE
+
+INTERFACE qsort
+  MODULE PROCEDURE :: qsort_int, qsort_real_sp, qsort_real_dp
+END INTERFACE
+
 CONTAINS
 
 
-SUBROUTINE sort_insert(items, item_size, cmp)
+SUBROUTINE sort_insert_gen(items, item_size, cmp)
   TYPE(*), TARGET        :: items(:)
   INTEGER, INTENT(IN)    :: item_size
   PROCEDURE(compare_fn)  :: cmp
@@ -47,14 +56,14 @@ SUBROUTINE sort_insert(items, item_size, cmp)
     
     inner: DO WHILE (j > 1)
     
-        jloc = (j-1) * item_size + 1
-        ! candidate is >= to the last element of the sorted array -- leave it
-        p1 = c_loc(items(j-1))
-        IF (cmp(p1, p2) <= 0) EXIT inner
-        ! Shift ITEMS(J) one position towards the end
-        item_bits(jloc: jloc - 1 + item_size) = item_bits(jloc - item_size:jloc-1)
-        ! Try next J
-        j = j - 1
+      jloc = (j-1) * item_size + 1
+      ! candidate is >= to the last element of the sorted array -- leave it
+      p1 = c_loc(items(j-1))
+      IF (cmp(p1, p2) <= 0) EXIT inner
+      ! Shift ITEMS(J) one position towards the end
+      item_bits(jloc: jloc - 1 + item_size) = item_bits(jloc - item_size:jloc-1)
+      ! Try next J
+      j = j - 1
     END DO inner
     
     jloc = (j-1) * item_size + 1
@@ -62,8 +71,25 @@ SUBROUTINE sort_insert(items, item_size, cmp)
     item_bits(jloc:jloc-1+item_size) = tmp(1:item_size)
     
   END DO outer
-    
-END SUBROUTINE
+
+END SUBROUTINE sort_insert_gen
+
+
+#define SORT_INTEGER 1
+#define SORT_REAL 2
+#define SORT_TYPE SORT_INTEGER
+#include "sort_inc.f90"
+
+#undef SORT_TYPE
+#define SORT_TYPE SORT_REAL
+#define SORT_KIND 6
+#include "sort_inc.f90"
+
+#undef SORT_TYPE
+#define SORT_TYPE SORT_REAL
+#undef SORT_KIND
+#define SORT_KIND 15
+#include "sort_inc.f90"
 
 
 END MODULE

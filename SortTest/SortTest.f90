@@ -1,36 +1,59 @@
-program sort_demo
+PROGRAM sort_demo
     
-use, intrinsic :: iso_c_binding, only : c_ptr, c_f_pointer
-use sort_m
+USE, INTRINSIC :: iso_c_binding, ONLY : c_ptr, c_f_pointer
+USE sort_m
 
-implicit none
+IMPLICIT NONE
 
-integer, dimension(10) :: a = [3, 4, 1, 9, 7, 10, 5, 2, 8, 6]
+INTEGER :: a(10) = [3, 4, 1, 9, 7, 10, 5, 2, 8, 6]
+INTEGER :: b(10)
+REAL :: c(10)
 
-print *, 'Before sorting'
-print *, a
-call sort_insert(a, storage_size(a(1)) / 8, int_cmp)
-print *, 'After sorting'
-print *, a
+b(:) = a(:)
+c(:) = a(:)
+
+PRINT '(/,T30,A)', 'FGL: Sort testing'
+PRINT '(A,/)', REPEAT('=', 80)
+
+PRINT '(T2, A)', 'Sorting using generic interface'
+PRINT '(T4, A)', 'Before sorting'
+PRINT '(T4, 10I4)', a
+CALL sort_insert(a, storage_size(a(1)) / 8, int_cmp)
+PRINT '(T4, A)', 'After sorting'
+PRINT '(T4,10I4,/)', a
+
+PRINT '(T2, A)', 'Sorting integers'
+PRINT '(T4, A)', 'Before sorting'
+PRINT '(T4, 10I4)', b
+CALL sort_insert(b)
+PRINT '(T4, A)', 'After sorting'
+PRINT '(T4,10I4,/)', b
+
+PRINT '(T2, A)', 'Sorting reals'
+PRINT '(T4, A)', 'Before sorting'
+PRINT '(T4, 10F6.1)', c
+CALL qsort(c)
+PRINT '(T4, A)', 'After sorting'
+PRINT '(T4,10F6.1)', c
 
 
-contains
+CONTAINS
 
 
-integer function int_cmp(x, y)
+INTEGER FUNCTION int_cmp(x, y)
     
-    type(c_ptr), intent(in) :: x, y        
-    
-    integer, pointer :: px, py
-    
-    int_cmp = 0
+  TYPE(c_ptr), INTENT(IN) :: x, y        
+  
+  INTEGER, POINTER :: px, py
+  
+  int_cmp = 0
 
-    call c_f_pointer(x, px)
-    call c_f_pointer(y, py)
+  CALL c_f_pointer(x, px)
+  CALL c_f_pointer(y, py)
+  
+  int_cmp = px - py
     
-    int_cmp = px - py
-    
-end function
+END FUNCTION
 
 
-end program
+END PROGRAM
