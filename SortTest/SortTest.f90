@@ -8,6 +8,9 @@ IMPLICIT NONE
 INTEGER :: a(10) = [3, 4, 1, 9, 7, 10, 5, 2, 8, 6]
 INTEGER :: b(10)
 REAL :: c(10)
+REAL, ALLOCATABLE :: d1(:), d2(:)
+INTEGER :: nd, nt, it, tstart, trate, tend, j, in
+REAL :: tq, ti
 
 b(:) = a(:)
 c(:) = a(:)
@@ -35,6 +38,58 @@ PRINT '(T4, 10F6.1)', c
 CALL qsort(c)
 PRINT '(T4, A)', 'After sorting'
 PRINT '(T4,10F6.1)', c
+
+WRITE(*, '(/,T2,A)') 'Testing sorting on varying size data'
+
+nd = 1024
+
+ALLOCATE(d1(nd), d2(nd))
+
+nt = 50
+
+WRITE (*, '(T12, A, T24, A, T36, A)') 'N', 'INSERT', 'QSORT'
+
+inn: DO in = 1, 7
+
+  WRITE (*, '(T4, I8)', advance='NO') nd
+  ti = 0
+  tq = 0
+
+  itt: DO it = 1, nt
+    CALL RANDOM_NUMBER(d1)
+    d2(1:nd) = d1(1:nd)
+
+    CALL SYSTEM_CLOCK(count=tstart, count_rate=trate)
+    CALL sort_insert(d1(1:nd))
+    CALL SYSTEM_CLOCK(count=tend)
+    ti = ti + (tend - tstart) * 1.0 / trate
+
+    DO j = 2, nd
+      IF (d1(j) < d1(j-1)) THEN
+        WRITE (*, '(T4, A)') 'ERROR: Incorrectly sorted using INSERT'
+        STOP
+      END IF
+    END DO
+
+    CALL SYSTEM_CLOCK(count=tstart, count_rate=trate)
+    CALL qsort(d2(1:nd))
+    CALL SYSTEM_CLOCK(count=tend)
+    tq = tq + (tend - tstart) * 1.0 / trate
+
+    DO j = 2, nd
+      IF (d2(j) < d2(j-1)) THEN
+        WRITE (*, '(T4, A)') 'ERROR: Incorrectly sorted using QSORT'
+        STOP
+      END IF
+    END DO
+  END DO itt
+
+  ti = ti / nt
+  tq = tq / nt
+  WRITE (*, '(T12, ES9.2, T24, ES9.2)') ti, tq
+  nd = nd/2
+
+END DO inn
 
 
 CONTAINS
