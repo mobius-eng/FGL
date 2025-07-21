@@ -1,13 +1,13 @@
-#IF SORT_TYPE == SORT_INTEGER
+#if SORT_TYPE == SORT_INTEGER
 
 #define SORT_SUFFIX int
 #undef SORT_KIND
 
 #elif SORT_TYPE == SORT_REAL
 
-#IF SORT_KIND < 10
+#if SORT_KIND < 10
 #define SORT_SUFFIX real_sp
-#ELSE
+#else
 #define SORT_SUFFIX real_dp
 #endif
 
@@ -26,14 +26,14 @@ SUBROUTINE SORT_NAME(SORT_SUFFIX)(items)
 #ifdef SORT_KIND
   INTEGER, PARAMETER :: wp = SELECTED_REAL_KIND(SORT_KIND)
   REAL(wp), INTENT(INOUT) :: items(:)
-#ELSE
+#else
   INTEGER, INTENT(INOUT)  :: items(:)
 #endif
   
   INTEGER :: i, j
 #ifdef SORT_KIND
   REAL(wp) :: tmp
-#ELSE
+#else
   INTEGER  :: tmp
 #endif
   
