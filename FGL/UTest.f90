@@ -73,6 +73,7 @@ SUBROUTINE test_true(cond, name)
     IF (colors) WRITE(unit,'(A)',advance='no') TRIM(red_attr)
     WRITE (unit, '(A)', advance='no') 'FAIL'
     IF (colors) WRITE (unit,'(A)', advance='no') TRIM(reset_attr)
+    WRITE (unit, '(T4,A)') TRIM(name)
   END IF
 END SUBROUTINE
 
