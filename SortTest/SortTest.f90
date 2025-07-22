@@ -21,14 +21,14 @@ PRINT '(A,/)', REPEAT('=', 80)
 PRINT '(T2, A)', 'Sorting using generic interface'
 PRINT '(T4, A)', 'Before sorting'
 PRINT '(T4, 10I4)', a
-CALL sort_insert(a, storage_size(a(1)) / 8, int_cmp)
+CALL isort(a, storage_size(a(1)) / 8, int_cmp)
 PRINT '(T4, A)', 'After sorting'
 PRINT '(T4,10I4,/)', a
 
 PRINT '(T2, A)', 'Sorting integers'
 PRINT '(T4, A)', 'Before sorting'
 PRINT '(T4, 10I4)', b
-CALL sort_insert(b)
+CALL isort(b)
 PRINT '(T4, A)', 'After sorting'
 PRINT '(T4,10I4,/)', b
 
@@ -60,7 +60,7 @@ inn: DO in = 1, 7
     d2(1:nd) = d1(1:nd)
 
     CALL SYSTEM_CLOCK(count=tstart, count_rate=trate)
-    CALL sort_insert(d1(1:nd))
+    CALL isort(d1(1:nd))
     CALL SYSTEM_CLOCK(count=tend)
     ti = ti + (tend - tstart) * 1.0 / trate
 

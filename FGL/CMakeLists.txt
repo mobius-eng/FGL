@@ -5,6 +5,9 @@ add_library(
     Error.f90
     String.f90
     UStorage.f90
+    sort_int.f90
+    sort_real_sp.f90
+    sort_real_dp.f90
     Sort.f90
     Optional.f90
     Logger.f90
@@ -13,6 +16,7 @@ add_library(
     Hash.f90
     HashTable.f90
     FJSON.f90
+    UTest.f90
 )
 
 target_include_directories(FGL PUBLIC ${CMAKE_BINARY_DIR}/mod)

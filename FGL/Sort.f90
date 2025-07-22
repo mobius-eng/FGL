@@ -2,10 +2,12 @@ MODULE sort_m
 
 USE, INTRINSIC :: iso_c_binding,   ONLY : c_loc, c_f_pointer, c_ptr
 USE, INTRINSIC :: iso_fortran_env, ONLY : int8
-
+USE            :: sort_int_m, ONLY : isort_int => isort, qsort_int => qsort
+USE            :: sort_real_sp_m, ONLY : isort_real_sp => isort, qsort_real_sp => qsort
+USE            :: sort_real_dp_m, ONLY : isort_real_dp => isort, qsort_real_dp => qsort
 IMPLICIT NONE
 PRIVATE
-PUBLIC :: compare_fn, sort_insert, qsort
+PUBLIC :: compare_fn, isort, qsort
 
 ABSTRACT INTERFACE
 
@@ -18,19 +20,21 @@ ABSTRACT INTERFACE
 END INTERFACE
 
 
-INTERFACE sort_insert
-  MODULE PROCEDURE :: sort_insert_gen, sort_insert_int, &
-                      sort_insert_real_sp, sort_insert_real_dp
+INTERFACE isort
+  !IMPORT isort_int, isort_real_sp, isort_real_dp
+  MODULE PROCEDURE :: isort_gen, isort_int, &
+                      isort_real_sp, isort_real_dp
 END INTERFACE
 
 INTERFACE qsort
+  !IMPORT qsort_int, qsort_real_sp, qsort_real_dp
   MODULE PROCEDURE :: qsort_int, qsort_real_sp, qsort_real_dp
 END INTERFACE
 
 CONTAINS
 
 
-SUBROUTINE sort_insert_gen(items, item_size, cmp)
+SUBROUTINE isort_gen(items, item_size, cmp)
   TYPE(*), TARGET        :: items(:)
   INTEGER, INTENT(IN)    :: item_size
   PROCEDURE(compare_fn)  :: cmp
@@ -72,24 +76,7 @@ SUBROUTINE sort_insert_gen(items, item_size, cmp)
     
   END DO outer
 
-END SUBROUTINE sort_insert_gen
-
-
-#define SORT_INTEGER 1
-#define SORT_REAL 2
-#define SORT_TYPE SORT_INTEGER
-#include "sort_inc.f90"
-
-#undef SORT_TYPE
-#define SORT_TYPE SORT_REAL
-#define SORT_KIND 6
-#include "sort_inc.f90"
-
-#undef SORT_TYPE
-#define SORT_TYPE SORT_REAL
-#undef SORT_KIND
-#define SORT_KIND 15
-#include "sort_inc.f90"
+END SUBROUTINE isort_gen
 
 
 END MODULE
