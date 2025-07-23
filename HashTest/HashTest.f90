@@ -9,26 +9,15 @@ type point_t
 end type
 
 integer, parameter :: point_size = sizeof(point_t(0.0, 0.0))
-integer, parameter :: strlen = 64
+integer, parameter :: keylen = 64
 
-character(len=strlen) :: str
+character(len=keylen) :: str
 type(point_t) :: p, q
-type(hashtable_t(strlen, point_size)) :: htbl
-integer :: htbl_err, i, nlen
+type(hashtable_t) :: htbl
+integer :: htbl_err
 
-type(hashtable_entry_t(strlen, point_size)) :: he
-character(64) :: s
-
-s = 'Hello'
-nlen = len_trim(s)
-call he%clear()
-do i=1,nlen
-  he%key(i) = s(i:i)
-end do
-he%hash = 1234
-
-write (*,*) 'Hashtable demo'
-call htbl%init(init_size = 10)
+WRITE (*,*) 'Hashtable demo'
+call htbl%init(keylen, point_size, init_size = 10)
 
 p%x = 1.0
 p%y = 2.0
